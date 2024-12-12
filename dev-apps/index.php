@@ -1,5 +1,6 @@
 <!-- koneksi -->
 <?php
+session_start();
 include 'koneksi.php';
 
 $folder = !empty($_GET['folder']) ? $_GET['folder'] : 'dashboard'; // default folder is dashboard

@@ -64,22 +64,33 @@ include "koneksi.php";
                                                 <td><?= $value['nim'] ?> <br> <?= $value['nama'] ?></td>
                                                 <td>
                                                     <?php
-                                                    if ($value['jenis_kelamin'] == 'L') {
-                                                        echo "Laki-laki";
+                                                    // Pastikan kolom 'jenis_kelamin' ada di array $value
+                                                    if (isset($value['jenis_kelamin'])) {
+                                                        // Periksa nilai 'jenis_kelamin' dan tampilkan output sesuai
+                                                        if ($value['jenis_kelamin'] === 'L' || strtolower($value['jenis_kelamin']) === 'laki-laki') {
+                                                            echo "Laki-laki";
+                                                        } elseif ($value['jenis_kelamin'] === 'P' || strtolower($value['jenis_kelamin']) === 'perempuan') {
+                                                            echo "Perempuan";
+                                                        } else {
+                                                            // Jika nilai tidak dikenali
+                                                            echo "Data tidak valid";
+                                                        }
                                                     } else {
-                                                        echo "Perempuan";
+                                                        // Jika kolom 'jenis_kelamin' tidak ditemukan
+                                                        echo "Jenis kelamin tidak tersedia";
                                                     }
                                                     ?>
                                                 </td>
+
                                                 <td>
                                                     <?= $value['fakultas'] ?> <br>
                                                     <?= $value['program_studi'] ?>
                                                 </td>
                                                 <td>
                                                     <!-- Tombol Edit -->
-                                                    <a href="master_user_edit.html" class="btn btn-warning btn-xs">EDIT</a>
+                                                    <a href="index.php?folder=mahasiswa&page=edit" class="btn btn-warning btn-xs">EDIT</a>
                                                     <!-- Tombol Delete -->
-                                                    <a href="" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure ?')">DELETE</a>
+                                                    <a href="index.php?folder=mahasiswa&page=delete" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure ?')">DELETE</a>
                                                 </td>
                                             </tr>
                                     <?php

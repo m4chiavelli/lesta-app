@@ -1,65 +1,79 @@
-<?php
-// Memasukkan script koneksi
-include "koneksi.php";
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
 
-// Mengambil data dari form
-$nim = $_POST['nim'];
-$nama = $_POST['nama'];
-$jenis_kelamin = $_POST['jenis_kelamin'];
-$tgl_lahir = $_POST['tgl_lahir'];
-$umur = $_POST['umur'];
-$fakultas = $_POST['fakultas'];
-$program_studi = $_POST['program_studi'];
-$email = $_POST['email'];
-$alamat = $_POST['alamat'];
+                    <?php
+                    // Memulai sesi
+                    session_start();
 
-// Membuat query untuk menambahkan data ke tabel mahasiswa
-$sql = "INSERT INTO mahasiswa (nim, nama, jenis_kelamin, tgl_lahir, umur, fakultas, program_studi, email, alamat) 
-        VALUES ('$nim', '$nama', '$jenis_kelamin', '$tgl_lahir', '$umur', '$fakultas', '$program_studi', '$email', '$alamat')";
+                    // Aktifkan error reporting
+                    ini_set('display_errors', 1);
+                    ini_set('display_startup_errors', 1);
+                    error_reporting(E_ALL);
 
-if ($conn->query($sql) === TRUE) {
-    // Jika berhasil, tampilkan alert dan redirect
-    echo "
-    <html>
-    <head>
-        <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css'>
-    </head>
-    <body>
-        <div class='container mt-5'>
-            <div class='alert alert-success alert-dismissible fade show' role='alert'>
-                <strong>Berhasil!</strong> Data berhasil ditambahkan. Anda akan dialihkan ke halaman utama dalam 3 detik.
-                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                    // Masukkan script koneksi
+                    include "koneksi.php";
+
+                    // Validasi apakah data dikirim melalui POST
+                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        // Mengambil data dari form
+                        $nim = $_POST['nim'] ?? null;
+                        $nama = $_POST['nama'] ?? null;
+                        $jenis_kelamin = $_POST['jenis_kelamin'] ?? null;
+                        $tgl_lahir = $_POST['tgl_lahir'] ?? null;
+                        $umur = $_POST['umur'] ?? null;
+                        $fakultas = $_POST['fakultas'] ?? null;
+                        $program_studi = $_POST['program_studi'] ?? null;
+                        $email = $_POST['email'] ?? null;
+                        $alamat = $_POST['alamat'] ?? null;
+
+                        // Validasi data wajib
+                        if (empty($nim) || empty($nama) || empty($jenis_kelamin)) {
+                            $_SESSION['error_message'] = "Field NIM, Nama, dan Jenis Kelamin wajib diisi.";
+                            header("Location: index.php?folder=mahasiswa&page=add");
+                            exit;
+                        }
+
+                        // Membuat query
+                        $sql = "INSERT INTO mahasiswa (nim, nama, jenis_kelamin, tgl_lahir, umur, fakultas, program_studi, email, alamat) 
+            VALUES ('$nim', '$nama', '$jenis_kelamin', '$tgl_lahir', '$umur', '$fakultas', '$program_studi', '$email', '$alamat')";
+
+                        // Eksekusi query
+                        if ($conn->query($sql) === TRUE) {
+                            $_SESSION['success_message'] = "Data berhasil ditambahkan.";
+                            header("Location: index.php?folder=mahasiswa");
+                            exit;
+                        } else {
+                            $_SESSION['error_message'] = "Error: " . $conn->error;
+                            header("Location: index.php?folder=mahasiswa&page=add");
+                            exit;
+                        }
+                    } else {
+                        // Jika akses bukan melalui POST
+                        $_SESSION['error_message'] = "Akses tidak valid.";
+                        header("Location: index.php?folder=mahasiswa");
+                        exit;
+                    }
+
+                    // Tutup koneksi
+                    $conn->close();
+                    ?>
+
+
+                </div><!-- /.col -->
             </div>
+            <!-- /.card-body -->
         </div>
-        <script>
-            setTimeout(function() {
-                window.location.href = 'index.php?folder=mahasiswa';
-            }, 3000); // Waktu tunggu 3 detik
-        </script>
-    </body>
-    </html>";
-} else {
-    // Jika gagal, tampilkan alert dan redirect ke halaman sebelumnya
-    echo "
-    <html>
-    <head>
-        <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css'>
-    </head>
-    <body>
-        <div class='container mt-5'>
-            <div class='alert alert-danger alert-dismissible fade show' role='alert'>
-                <strong>Gagal!</strong> Error: " . $conn->error . ".
-                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-            </div>
-        </div>
-        <script>
-            setTimeout(function() {
-                window.history.back(); // Kembali ke halaman sebelumnya
-            }, 3000); // Waktu tunggu 3 detik
-        </script>
-    </body>
-    </html>";
-}
-
-// Menutup koneksi
-$conn->close();
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+</div>

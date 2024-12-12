@@ -35,7 +35,7 @@ include "koneksi.php";
                         <div class="card-body">
                             <div class="card card-info">
                                 <div class="card-header">
-                                    <h3 class="card-title">ADD NEW USER</h3>
+                                    <h3 class="card-title">EDIT USER</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
